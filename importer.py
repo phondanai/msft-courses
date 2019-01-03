@@ -93,12 +93,12 @@ def _is_library_file(filename):
         return False
 
 
-def _filename_to_id_and_run(filename):
+def _filename_to_org_id_and_run(filename):
     basename = path.basename(filename).replace('.tar.gz', '')
-    parts = basename.split('-')
+    parts = basename.replace('course-v1:', '').split('+')
 
     if len(parts) == 3:
-        course_id, run = parts[-2:]  # Microsoft course file naming convention
+        org, course_id, run = parts 
     elif len(parts) == 4:  # some courses have hyphenated ids.  Assume an additional hyphen is in id
         course_id = '-'.join((parts[1], parts[2]))
         run = parts[3]
@@ -106,7 +106,7 @@ def _filename_to_id_and_run(filename):
         raise ValueError("Invalid filename, too many or too few hyphens")
 
 
-    return course_id.strip(), run.strip()
+    return org.strip(), course_id.strip(), run.strip()
 
 
 def cleanup():
@@ -184,9 +184,10 @@ def _set_course_dates(course_id):
 
 def import_single_course(filename):
     print >> sys.stderr, 'IMPORTING course:', filename
-    course_id, course_run = _filename_to_id_and_run(filename)
+    org, course_id, course_run = _filename_to_org_id_and_run(filename)
 
-    course_full_id = 'course-v1:Microsoft+{id}+{run}'.format(
+    course_full_id = 'course-v1:{org}+{id}+{run}'.format(
+        org=org,
         id=course_id,
         run=course_run
     )

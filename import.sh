@@ -21,7 +21,7 @@ fi
 
 if [ "$0" == "bash" ]; then
     if [ -z "$1" ]; then
-        BASE_URL="https://raw.githubusercontent.com/appsembler/msft-courses/master"
+        BASE_URL="https://raw.githubusercontent.com/phondanai/msft-courses/master"
         IMPORTER=$(mktemp /tmp/abc-script.XXXXXXXX)
         curl "$BASE_URL/importer.py" | tee "$IMPORTER"
         chmod a+wrx "$IMPORTER"
